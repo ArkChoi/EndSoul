@@ -14,4 +14,16 @@ class ENDSOUL_API ACommanderPCBase : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	ACommanderPCBase();
+
+	//virtual void OnPossess(APawn* aPawn) override;
+	virtual void OnUnPossess() override;
+	virtual void BeginPlay() override;
+
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<class UInputMappingContext> InputMapping;
+
 };

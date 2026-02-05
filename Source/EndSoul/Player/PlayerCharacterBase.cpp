@@ -5,6 +5,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "EnhancedInputComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 APlayerCharacterBase::APlayerCharacterBase()
@@ -44,5 +46,36 @@ void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Move);
+
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Look);
+	}
+}
+
+void APlayerCharacterBase::Move(const FInputActionValue& Value)
+{
+	FVector2D MovementValue = Value.Get<FVector2D>();
+
+	const FRotator CameraRotation = GetController()->GetControlRotation();
+	const FRotator YawRotation = FRotator(0, CameraRotation.Yaw, 0);
+	const FRotator YawRollRotation = FRotator(0, CameraRotation.Yaw, CameraRotation.Roll);
+
+
+	const FVector ForwardVector = UKismetMathLibrary::GetForwardVector(YawRotation);
+	AddMovementInput(ForwardVector, MovementValue.Y);
+
+	const FVector RightVector = UKismetMathLibrary::GetRightVector(YawRollRotation);
+	AddMovementInput(RightVector, MovementValue.X);
+
+}
+
+void APlayerCharacterBase::Look(const FInputActionValue& Value)
+{
+	const FVector2D LookValue = Value.Get<FVector2D>();
+
+	AddControllerPitchInput(LookValue.Y);
+	AddControllerYawInput(LookValue.X);
 }
 

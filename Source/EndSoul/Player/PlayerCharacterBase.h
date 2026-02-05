@@ -26,10 +26,28 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//Base
 protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 	TObjectPtr <class USpringArmComponent> SpringArm;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 	TObjectPtr <class UCameraComponent> Camera;
+
+	//Movement
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<class UInputAction> MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<class UInputAction> LookAction;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void Move(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
+	void Look(const FInputActionValue& Value);
+
+
 };
