@@ -17,6 +17,9 @@ class ENDSOUL_API UPCBaseAnimInstance : public UAnimInstance
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Character)
 	float GroundSpeed = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Character)
+	float Direction = 0.f;
 	
 	virtual void NativeUpdateAnimation(float DeltaSeconds)override;
 };
