@@ -75,7 +75,7 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 {
 	const FVector2D LookValue = Value.Get<FVector2D>();
 
-	AddControllerPitchInput(LookValue.Y);
+	AddControllerPitchInput(-LookValue.Y);
 	AddControllerYawInput(LookValue.X);
 }
 
