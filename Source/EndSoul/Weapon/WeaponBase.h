@@ -7,6 +7,7 @@
 #include "WeaponBase.generated.h"
 
 class UAnimMontage;
+class ACharacter;
 
 UCLASS()
 class ENDSOUL_API AWeaponBase : public AActor
@@ -33,7 +34,7 @@ protected:
 	TObjectPtr<UAnimMontage> ChargeAttackMontage;
 
 public:
-
-	//UAnimMontage ComboAttack();
+	UFUNCTION(BlueprintCallable)
+	void ComboAttack(ACharacter *PC);
 
 };

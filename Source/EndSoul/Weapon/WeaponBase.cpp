@@ -2,6 +2,7 @@
 
 
 #include "WeaponBase.h"
+#include "GameFramework/Character.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -25,8 +26,8 @@ void AWeaponBase::Tick(float DeltaTime)
 
 }
 
-//UAnimMontage AWeaponBase::ComboAttack()
-//{
-//	//return ComboAttackMontage;
-//}
+void AWeaponBase::ComboAttack(ACharacter *PC)
+{
+	PC->PlayAnimMontage(ComboAttackMontage);
+}
 

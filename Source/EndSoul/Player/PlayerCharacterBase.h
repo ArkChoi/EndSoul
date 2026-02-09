@@ -34,6 +34,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 	TObjectPtr <class UCameraComponent> Camera;
 
+	UPROPERTY(Category = Character, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UChildActorComponent> Weapon;
+
 	//Movement
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
@@ -42,12 +45,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<class UInputAction> LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<class UInputAction> ComboAttackAction;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable)
 	void Look(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
+	void ComboAttack();
 
 
 };

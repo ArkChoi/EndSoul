@@ -7,6 +7,8 @@
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/ChildActorComponent.h"
+#include "../Weapon/WeaponBase.h"
 
 // Sets default values
 APlayerCharacterBase::APlayerCharacterBase()
@@ -22,6 +24,9 @@ APlayerCharacterBase::APlayerCharacterBase()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
+	Weapon->SetupAttachment(GetMesh());
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight()));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90.f, 0));
@@ -51,6 +56,12 @@ void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Move);
 
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Look);
+
+		EnhancedInputComponent->BindAction(ComboAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::ComboAttack);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("EnhancedInputComponent_Not_Found"));
 	}
 }
 
@@ -77,5 +88,14 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 
 	AddControllerPitchInput(-LookValue.Y);
 	AddControllerYawInput(LookValue.X);
+}
+
+void APlayerCharacterBase::ComboAttack()
+{
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	if (ChildWeapon)
+	{
+		ChildWeapon->ComboAttack(this);
+	}
 }
 
