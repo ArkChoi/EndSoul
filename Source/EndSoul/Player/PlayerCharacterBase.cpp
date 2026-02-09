@@ -95,7 +95,7 @@ void APlayerCharacterBase::ComboAttack()
 	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
 	if (ChildWeapon)
 	{
-		ChildWeapon->ComboAttack(this);
+		ChildWeapon->ComboAttack(this, false);
 	}
 }
 

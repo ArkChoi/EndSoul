@@ -37,6 +37,10 @@ protected:
 	UPROPERTY(Category = Character, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UChildActorComponent> Weapon;
 
+public:
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UChildActorComponent* GetWeapon() { return Weapon; };
+
 	//Movement
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)

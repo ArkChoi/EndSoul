@@ -27,14 +27,37 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 	TObjectPtr<UAnimMontage> ComboAttackMontage;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 	TObjectPtr<UAnimMontage> ChargeAttackMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	int ComboCount = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	uint8 bComboCheak : 1 = 0;
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void ComboAttack(ACharacter *PC);
+	bool CheackAnimation(ACharacter* PC);
 
+	UFUNCTION(BlueprintCallable)
+	void ComboAttack(ACharacter *PC, bool bIsPlay);
+
+	UFUNCTION(BlueprintCallable)
+	void ComboAttackCountUp();
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE int GetComboCount() { return ComboCount; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetComboCount(int InComboCount) { ComboCount = InComboCount; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool GetbComboCheak() { return bComboCheak; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetbComboCheak(bool InbComboCheak) { bComboCheak = InbComboCheak; };
 };

@@ -26,8 +26,37 @@ void AWeaponBase::Tick(float DeltaTime)
 
 }
 
-void AWeaponBase::ComboAttack(ACharacter *PC)
+bool AWeaponBase::CheackAnimation(ACharacter* PC)
 {
-	PC->PlayAnimMontage(ComboAttackMontage);
+	if (PC->GetMesh()->GetAnimInstance()->Montage_IsPlaying(ComboAttackMontage))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void AWeaponBase::ComboAttack(ACharacter *PC, bool bIsPlay)
+{
+	if (!bIsPlay && bComboCheak)
+	{
+		return;
+	}
+	else if (CheackAnimation(PC) && !bIsPlay)
+	{
+		ComboAttackCountUp();
+		bComboCheak = 1;
+		return;
+	}
+
+	bComboCheak = 0;
+	FString TempString = FString::FromInt(ComboCount);
+	PC->PlayAnimMontage(ComboAttackMontage, 1.0f, FName(*TempString));
+}
+
+void AWeaponBase::ComboAttackCountUp()
+{
+	ComboCount = ComboCount % 3;
+	ComboCount++;
 }
 
