@@ -39,6 +39,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	uint8 bComboCheak : 1 = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	uint8 bChargeLoop: 1 = 0;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	bool CheackAnimation(ACharacter* PC);
@@ -60,4 +63,19 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void SetbComboCheak(bool InbComboCheak) { bComboCheak = InbComboCheak; };
+
+	UFUNCTION(BlueprintCallable)
+	void ChargeAttack(ACharacter* PC);
+
+	UFUNCTION(BlueprintCallable)
+	void CancelChargeAttack(ACharacter* PC);
+
+	UFUNCTION(BlueprintCallable)
+	void ChargingChargeAttack(ACharacter* PC);
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool GetbChargeLoop() { return bChargeLoop; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetbChargeLoop(bool InbChargeLoop) { bChargeLoop = InbChargeLoop; };
 };

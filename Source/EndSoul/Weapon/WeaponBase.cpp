@@ -32,6 +32,10 @@ bool AWeaponBase::CheackAnimation(ACharacter* PC)
 	{
 		return true;
 	}
+	else if (PC->GetMesh()->GetAnimInstance()->Montage_IsPlaying(ChargeAttackMontage))
+	{
+		return true;
+	}
 
 	return false;
 }
@@ -58,5 +62,29 @@ void AWeaponBase::ComboAttackCountUp()
 {
 	ComboCount = ComboCount % 3;
 	ComboCount++;
+}
+
+void AWeaponBase::ChargeAttack(ACharacter* PC)
+{
+	FString TempString = FString::FromInt(1);
+	PC->PlayAnimMontage(ChargeAttackMontage, 1.0f, FName(*TempString));
+}
+
+void AWeaponBase::CancelChargeAttack(ACharacter* PC)
+{
+	FString TempString = FString::FromInt(3);
+	PC->PlayAnimMontage(ChargeAttackMontage, 1.0f, FName(*TempString));
+}
+
+void AWeaponBase::ChargingChargeAttack(ACharacter* PC)
+{
+	if (CheackAnimation(PC) && !bChargeLoop)
+	{
+		return;
+	}
+	bChargeLoop = false;
+
+	FString TempString = FString::FromInt(2);
+	PC->PlayAnimMontage(ChargeAttackMontage, 1.0f, FName(*TempString));
 }
 

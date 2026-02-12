@@ -52,6 +52,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<class UInputAction> ComboAttackAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<class UInputAction> ChargeAttackAction;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
@@ -62,5 +65,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ComboAttack();
 
+	UFUNCTION(BlueprintCallable)
+	void ChargeAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void CancelChargeAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void ChargingChargeAttack();
 
 };

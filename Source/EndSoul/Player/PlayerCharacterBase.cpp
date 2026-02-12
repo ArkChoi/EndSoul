@@ -58,6 +58,10 @@ void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Look);
 
 		EnhancedInputComponent->BindAction(ComboAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::ComboAttack);
+
+		EnhancedInputComponent->BindAction(ChargeAttackAction, ETriggerEvent::Started, this, &APlayerCharacterBase::ChargingChargeAttack);
+		EnhancedInputComponent->BindAction(ChargeAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::ChargeAttack);
+		EnhancedInputComponent->BindAction(ChargeAttackAction, ETriggerEvent::Canceled, this, &APlayerCharacterBase::CancelChargeAttack);
 	}
 	else
 	{
@@ -96,6 +100,33 @@ void APlayerCharacterBase::ComboAttack()
 	if (ChildWeapon)
 	{
 		ChildWeapon->ComboAttack(this, false);
+	}
+}
+
+void APlayerCharacterBase::ChargeAttack()
+{
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	if (ChildWeapon)
+	{
+		ChildWeapon->ChargeAttack(this);
+	}
+}
+
+void APlayerCharacterBase::CancelChargeAttack()
+{
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	if (ChildWeapon)
+	{
+		ChildWeapon->CancelChargeAttack(this);
+	}
+}
+
+void APlayerCharacterBase::ChargingChargeAttack()
+{
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	if (ChildWeapon)
+	{
+		ChildWeapon->ChargingChargeAttack(this);
 	}
 }
 
