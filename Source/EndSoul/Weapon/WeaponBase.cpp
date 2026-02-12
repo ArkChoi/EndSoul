@@ -66,6 +66,11 @@ void AWeaponBase::ComboAttackCountUp()
 
 void AWeaponBase::ChargeAttack(ACharacter* PC)
 {
+	if (CheackAnimation(PC))
+	{
+		return;
+	}
+
 	FString TempString = FString::FromInt(1);
 	PC->PlayAnimMontage(ChargeAttackMontage, 1.0f, FName(*TempString));
 }
