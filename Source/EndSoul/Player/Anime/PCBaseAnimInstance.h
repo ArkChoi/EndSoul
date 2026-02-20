@@ -20,6 +20,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Character)
 	float Direction = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Character)
+	uint8 bIsGuard : 1 = false;
 	
 	virtual void NativeUpdateAnimation(float DeltaSeconds)override;
 };

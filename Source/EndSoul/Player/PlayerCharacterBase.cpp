@@ -10,6 +10,7 @@
 #include "Components/ChildActorComponent.h"
 #include "../Weapon/WeaponBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 APlayerCharacterBase::APlayerCharacterBase()
@@ -145,5 +146,31 @@ void APlayerCharacterBase::Dash(UAnimMontage* InMontage, float InForce)
 
 	GetCharacterMovement()->AddImpulse(ForwardVector, true);
 	PlayAnimMontage(InMontage, 3.f);
+}
+
+void APlayerCharacterBase::StartGuard(float MovementSpeed)
+{
+	SetMovemoentSpeed(MovementSpeed);
+	bIsGuard = true;
+
+}
+
+void APlayerCharacterBase::EndGuard(float MovementSpeed)
+{
+	SetMovemoentSpeed(MovementSpeed);
+	bIsGuard = false;
+
+}
+
+void APlayerCharacterBase::PerfectGuard(UAnimMontage* InMontage)
+{
+	PlayAnimMontage(InMontage);
+}
+
+void APlayerCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APlayerCharacterBase, bIsGuard);
 }
 

@@ -83,4 +83,28 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Dash(UAnimMontage* InMontage, float InForce);
 
+	UFUNCTION(BlueprintCallable)
+	void StartGuard(float MovementSpeed);
+
+	UFUNCTION(BlueprintCallable)
+	void EndGuard(float MovementSpeed);
+
+	UFUNCTION(BlueprintCallable)
+	void PerfectGuard(UAnimMontage* InMontage);
+
+	//Animation
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation", Replicated)
+	uint8 bIsGuard : 1 = false;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool GetbIsGuard() { return bIsGuard; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetbIsGuard(bool Inbool) { bIsGuard = Inbool; };
+
+public:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 };
