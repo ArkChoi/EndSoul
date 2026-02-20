@@ -9,6 +9,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/ChildActorComponent.h"
 #include "../Weapon/WeaponBase.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 APlayerCharacterBase::APlayerCharacterBase()
@@ -36,6 +37,8 @@ APlayerCharacterBase::APlayerCharacterBase()
 void APlayerCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 	
 }
 
@@ -128,5 +131,19 @@ void APlayerCharacterBase::ChargingChargeAttack()
 	{
 		ChildWeapon->ChargingChargeAttack(this);
 	}
+}
+
+void APlayerCharacterBase::SetMovemoentSpeed(float InSpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = InSpeed;
+}
+
+void APlayerCharacterBase::Dash(UAnimMontage* InMontage, float InForce)
+{
+	FVector ForwardVector = UKismetMathLibrary::GetForwardVector( this->GetActorRotation() );
+	ForwardVector = ForwardVector * InForce;
+
+	GetCharacterMovement()->AddImpulse(ForwardVector, true);
+	PlayAnimMontage(InMontage, 3.f);
 }
 

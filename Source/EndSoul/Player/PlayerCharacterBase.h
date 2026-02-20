@@ -55,6 +55,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<class UInputAction> ChargeAttackAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
+	TObjectPtr<UAnimMontage> DashMontage;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& Value);
@@ -73,5 +76,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ChargingChargeAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void SetMovemoentSpeed(float InSpeed);
+
+	UFUNCTION(BlueprintCallable)
+	void Dash(UAnimMontage* InMontage, float InForce);
 
 };
