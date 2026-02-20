@@ -104,7 +104,29 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void SetbIsGuard(bool Inbool) { bIsGuard = Inbool; };
 
+	//State
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State", Replicated)
+	float MaxHP = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State", Replicated)
+	float CurrentHP = 100.f;
+
 public:
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE float GetMaxHP() { return MaxHP; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE float GetCurrentHP() { return CurrentHP; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetCurrentHP(float InCurrentHP) { CurrentHP = InCurrentHP; };
+
+	//ETC
+public:
+	UFUNCTION()
+	void ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };

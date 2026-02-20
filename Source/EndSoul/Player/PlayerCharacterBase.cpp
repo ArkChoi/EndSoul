@@ -40,6 +40,8 @@ void APlayerCharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	GetCharacterMovement()->MaxWalkSpeed = 300.f;
+
+	OnTakeAnyDamage.AddDynamic(this, &APlayerCharacterBase::ProcessOnTakeAnyDamage);
 	
 }
 
@@ -165,6 +167,22 @@ void APlayerCharacterBase::EndGuard(float MovementSpeed)
 void APlayerCharacterBase::PerfectGuard(UAnimMontage* InMontage)
 {
 	PlayAnimMontage(InMontage);
+}
+
+void APlayerCharacterBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	ACharacter* Enemy = Cast<ACharacter>(DamageCauser);
+	if (Enemy)
+	{
+		FVector EnemyLocation = Enemy->GetMesh()->GetComponentLocation();
+		FVector MyLocation = GetCapsuleComponent()->GetComponentLocation();
+		FVector ImpulseForce;
+		ImpulseForce = (MyLocation - EnemyLocation).GetSafeNormal();
+		ImpulseForce.Z = 0;
+		ImpulseForce *= 1000.f;
+		GetCapsuleComponent()->AddImpulse(ImpulseForce);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("PCDamageCheak"));
 }
 
 void APlayerCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

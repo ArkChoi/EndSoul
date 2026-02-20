@@ -26,6 +26,14 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	UPROPERTY(Category = Character, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UChildActorComponent> Weapon;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UChildActorComponent* GetWeapon() { return Weapon; };
+
 	//Base State
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = State)
@@ -53,6 +61,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void SetGrogy(float InGrogy) { Grogy = InGrogy; };
+
+	UFUNCTION(BlueprintCallable)
+	void Attack(UAnimMontage* InMontage);
 
 
 public:

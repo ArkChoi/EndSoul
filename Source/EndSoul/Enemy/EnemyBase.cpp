@@ -3,12 +3,18 @@
 
 #include "EnemyBase.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/ChildActorComponent.h"
+#include "../Weapon/WeaponBase.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
+	Weapon->SetupAttachment(GetMesh());
+	Weapon->SetChildActorClass(AWeaponBase::StaticClass());
 
 }
 
@@ -33,6 +39,11 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AEnemyBase::Attack(UAnimMontage* InMontage)
+{
+	PlayAnimMontage(InMontage);
 }
 
 void AEnemyBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
