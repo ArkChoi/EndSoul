@@ -75,6 +75,11 @@ void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	}
 }
 
+void APlayerCharacterBase::OnRep_CurrentHP(const float InHP)
+{
+	OnChangeHP.Broadcast(CurrentHP / MaxHP);
+}
+
 void APlayerCharacterBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementValue = Value.Get<FVector2D>();
@@ -182,6 +187,8 @@ void APlayerCharacterBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Da
 		ImpulseForce *= 1000.f;
 		GetCapsuleComponent()->AddImpulse(ImpulseForce);
 	}
+	SetCurrentHP((GetCurrentHP()-10.f));
+
 	UE_LOG(LogTemp, Warning, TEXT("PCDamageCheak"));
 }
 

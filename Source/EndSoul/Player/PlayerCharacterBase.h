@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacterBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeHP, const float, InEHP);
+
 UCLASS()
 class ENDSOUL_API APlayerCharacterBase : public ACharacter
 {
@@ -26,8 +28,16 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+	FOnChangeHP OnChangeHP;
+
+public:
+	UFUNCTION()
+	void OnRep_CurrentHP(const float InHP);
+
 	//Base
 protected:
+
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 	TObjectPtr <class USpringArmComponent> SpringArm;
 
@@ -112,6 +122,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State", Replicated)
 	float CurrentHP = 100.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State", Replicated)
+	float MaxStamina = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State", Replicated)
+	float CurrentStamina = 100.f;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE float GetMaxHP() { return MaxHP; };
@@ -121,6 +137,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void SetCurrentHP(float InCurrentHP) { CurrentHP = InCurrentHP; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE float GetMaxStamina() { return MaxStamina; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE float GetCurrentStamina() { return CurrentStamina; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetCurrentStamina(float InCurrentStamina) { CurrentStamina = InCurrentStamina; };
 
 	//ETC
 public:

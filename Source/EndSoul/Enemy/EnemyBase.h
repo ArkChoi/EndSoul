@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "EnemyBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeEHP, const float, InEHP);
+
 UCLASS()
 class ENDSOUL_API AEnemyBase : public ACharacter
 {
@@ -29,6 +31,8 @@ public:
 protected:
 	UPROPERTY(Category = Character, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UChildActorComponent> Weapon;
+
+	FOnChangeEHP OnChangeEHP;
 
 public:
 	UFUNCTION(BlueprintCallable)
