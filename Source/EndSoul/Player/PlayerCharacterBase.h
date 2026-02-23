@@ -86,10 +86,10 @@ public:
 	void Look(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable)
-	void ComboAttack();
+	void ComboAttack(const float InUsingStamina);
 
 	UFUNCTION(BlueprintCallable)
-	void ChargeAttack();
+	void ChargeAttack(const float InUsingStamina);
 
 	UFUNCTION(BlueprintCallable)
 	void CancelChargeAttack();
@@ -104,13 +104,13 @@ public:
 	void DoRun(float InStaminaDownSpeed);
 
 	UFUNCTION(BlueprintCallable)
-	void StopRun();
+	void EndRun();
 
 	UFUNCTION(BlueprintCallable)
 	void Dash(UAnimMontage* InMontage, float InForce);
 
 	UFUNCTION(BlueprintCallable)
-	void StartGuard(float MovementSpeed);
+	void DoGuard(float MovementSpeed);
 
 	UFUNCTION(BlueprintCallable)
 	void EndGuard(float MovementSpeed);
@@ -165,6 +165,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ReChargeStamina(float InStaminaCharge);
+
+	UFUNCTION(BlueprintCallable)
+	bool CheackStamina(float InUseStamina);
 
 	//ETC
 public:

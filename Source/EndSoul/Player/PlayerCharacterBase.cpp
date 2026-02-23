@@ -65,10 +65,10 @@ void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Look);
 
-		EnhancedInputComponent->BindAction(ComboAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::ComboAttack);
+		//EnhancedInputComponent->BindAction(ComboAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::ComboAttack);
 
 		EnhancedInputComponent->BindAction(ChargeAttackAction, ETriggerEvent::Started, this, &APlayerCharacterBase::ChargingChargeAttack);
-		EnhancedInputComponent->BindAction(ChargeAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::ChargeAttack);
+		//EnhancedInputComponent->BindAction(ChargeAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::ChargeAttack);
 		EnhancedInputComponent->BindAction(ChargeAttackAction, ETriggerEvent::Canceled, this, &APlayerCharacterBase::CancelChargeAttack);
 	}
 	else
@@ -112,21 +112,33 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 	AddControllerYawInput(LookValue.X);
 }
 
-void APlayerCharacterBase::ComboAttack()
+void APlayerCharacterBase::ComboAttack(const float InUsingStamina)
 {
+	if (CheackStamina(InUsingStamina))
+	{
+		return;
+	}
+
 	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
 	if (ChildWeapon)
 	{
 		ChildWeapon->ComboAttack(this, false);
+		CurrentStamina -= InUsingStamina;
 	}
 }
 
-void APlayerCharacterBase::ChargeAttack()
+void APlayerCharacterBase::ChargeAttack(const float InUsingStamina)
 {
+	if (CheackStamina(InUsingStamina))
+	{
+		return;
+	}
+
 	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
 	if (ChildWeapon)
 	{
 		ChildWeapon->ChargeAttack(this);
+		CurrentStamina -= InUsingStamina;
 	}
 }
 
@@ -155,9 +167,9 @@ void APlayerCharacterBase::SetMovemoentSpeed(float InSpeed)
 
 void APlayerCharacterBase::DoRun(float InStaminaDownSpeed)
 {
-	if (CurrentStamina <= 0)
+	if (CheackStamina(InStaminaDownSpeed))
 	{
-		StopRun();
+		EndRun();
 		return;
 	}
 
@@ -166,7 +178,7 @@ void APlayerCharacterBase::DoRun(float InStaminaDownSpeed)
 
 }
 
-void APlayerCharacterBase::StopRun()
+void APlayerCharacterBase::EndRun()
 {
 	SetMovemoentSpeed(300.f);
 }
@@ -180,7 +192,7 @@ void APlayerCharacterBase::Dash(UAnimMontage* InMontage, float InForce)
 	PlayAnimMontage(InMontage, 3.f);
 }
 
-void APlayerCharacterBase::StartGuard(float MovementSpeed)
+void APlayerCharacterBase::DoGuard(float MovementSpeed)
 {
 	SetMovemoentSpeed(MovementSpeed);
 	bIsGuard = true;
@@ -201,10 +213,20 @@ void APlayerCharacterBase::PerfectGuard(UAnimMontage* InMontage)
 
 void APlayerCharacterBase::ReChargeStamina(float InStaminaCharge)
 {
-	if (CurrentStamina < CurrentHP)
+	if (CurrentStamina < MaxStamina)
 	{
 		CurrentStamina += InStaminaCharge;
 	}
+}
+
+bool APlayerCharacterBase::CheackStamina(float InUseStamina)
+{
+	if (CurrentStamina - InUseStamina <= 0)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void APlayerCharacterBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
