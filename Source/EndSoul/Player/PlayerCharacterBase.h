@@ -6,7 +6,9 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacterBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeHP, const float, InEHP);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeHP, const float, InHP);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeStamina, const float, InStamina);
 
 UCLASS()
 class ENDSOUL_API APlayerCharacterBase : public ACharacter
@@ -31,9 +33,14 @@ public:
 public:
 	FOnChangeHP OnChangeHP;
 
+	FOnChangeStamina OnChangeStamina;
+
 public:
-	UFUNCTION()
-	void OnRep_CurrentHP(const float InHP);
+	UFUNCTION(BlueprintCallable)
+	void OnRep_HPUpdate(const float InHP);
+
+	UFUNCTION(BlueprintCallable)
+	void OnRep_StaminaUpdate(const float InStamina);
 
 	//Base
 protected:
@@ -65,6 +72,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<class UInputAction> ChargeAttackAction;
 
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	//TObjectPtr<class UInputAction> DashAction;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 	TObjectPtr<UAnimMontage> DashMontage;
 
@@ -89,6 +99,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetMovemoentSpeed(float InSpeed);
+
+	UFUNCTION(BlueprintCallable)
+	void DoRun(float InStaminaDownSpeed);
+
+	UFUNCTION(BlueprintCallable)
+	void StopRun();
 
 	UFUNCTION(BlueprintCallable)
 	void Dash(UAnimMontage* InMontage, float InForce);
@@ -116,16 +132,16 @@ public:
 
 	//State
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State", Replicated)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State")
 	float MaxHP = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State", Replicated)
 	float CurrentHP = 100.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State", Replicated)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State")
 	float MaxStamina = 100.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State", Replicated)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State", ReplicatedUsing="OnRep_StaminaUpdate")
 	float CurrentStamina = 100.f;
 
 public:
@@ -146,6 +162,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void SetCurrentStamina(float InCurrentStamina) { CurrentStamina = InCurrentStamina; };
+
+	UFUNCTION(BlueprintCallable)
+	void ReChargeStamina(float InStaminaCharge);
 
 	//ETC
 public:

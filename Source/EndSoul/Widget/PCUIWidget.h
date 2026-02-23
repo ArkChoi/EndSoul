@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "PCUIWidget.generated.h"
 
+
+
 class UProgressBar;
 //class;
 
@@ -27,8 +29,10 @@ public:
 public:
 	virtual void NativeConstruct() override;
 
+	UFUNCTION(BlueprintCallable)
 	void UpdateHP(float InHP);
 
+	UFUNCTION(BlueprintCallable)
 	void UpdateStamina(float InStamina);
 
 };

@@ -13,7 +13,9 @@ void UPCUIWidget::NativeConstruct()
 	if (Player)
 	{
 		Player->OnChangeHP.AddDynamic(this, &UPCUIWidget::UpdateHP);
-		Player->OnRep_CurrentHP(Player->GetCurrentHP() / Player->GetMaxHP());
+		Player->OnRep_HPUpdate(1);
+		Player->OnChangeStamina.AddDynamic(this, &UPCUIWidget::UpdateStamina);
+		Player->OnRep_StaminaUpdate(1);
 	}
 }
 

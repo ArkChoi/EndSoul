@@ -32,6 +32,8 @@ APlayerCharacterBase::APlayerCharacterBase()
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight()));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90.f, 0));
+
+	bReplicates = true; //이걸 해줘야 ReplicatedUsing 가 동작되는 듯 하다.
 }
 
 // Called when the game starts or when spawned
@@ -75,9 +77,14 @@ void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	}
 }
 
-void APlayerCharacterBase::OnRep_CurrentHP(const float InHP)
+void APlayerCharacterBase::OnRep_HPUpdate(const float InHP)
 {
 	OnChangeHP.Broadcast(CurrentHP / MaxHP);
+}
+
+void APlayerCharacterBase::OnRep_StaminaUpdate(const float InStamina)
+{
+	OnChangeStamina.Broadcast(CurrentStamina / MaxStamina);
 }
 
 void APlayerCharacterBase::Move(const FInputActionValue& Value)
@@ -146,6 +153,24 @@ void APlayerCharacterBase::SetMovemoentSpeed(float InSpeed)
 	GetCharacterMovement()->MaxWalkSpeed = InSpeed;
 }
 
+void APlayerCharacterBase::DoRun(float InStaminaDownSpeed)
+{
+	if (CurrentStamina <= 0)
+	{
+		StopRun();
+		return;
+	}
+
+	SetMovemoentSpeed(600.f);
+	CurrentStamina -= InStaminaDownSpeed;
+
+}
+
+void APlayerCharacterBase::StopRun()
+{
+	SetMovemoentSpeed(300.f);
+}
+
 void APlayerCharacterBase::Dash(UAnimMontage* InMontage, float InForce)
 {
 	FVector ForwardVector = UKismetMathLibrary::GetForwardVector( this->GetActorRotation() );
@@ -174,6 +199,14 @@ void APlayerCharacterBase::PerfectGuard(UAnimMontage* InMontage)
 	PlayAnimMontage(InMontage);
 }
 
+void APlayerCharacterBase::ReChargeStamina(float InStaminaCharge)
+{
+	if (CurrentStamina < CurrentHP)
+	{
+		CurrentStamina += InStaminaCharge;
+	}
+}
+
 void APlayerCharacterBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
 	ACharacter* Enemy = Cast<ACharacter>(DamageCauser);
@@ -188,13 +221,17 @@ void APlayerCharacterBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Da
 		GetCapsuleComponent()->AddImpulse(ImpulseForce);
 	}
 	SetCurrentHP((GetCurrentHP()-10.f));
+	OnRep_HPUpdate(1);
 
-	UE_LOG(LogTemp, Warning, TEXT("PCDamageCheak"));
+	UE_LOG(LogTemp, Warning, TEXT("HP : %f"), CurrentHP);
 }
 
 void APlayerCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APlayerCharacterBase, CurrentHP);
+	DOREPLIFETIME(APlayerCharacterBase, CurrentStamina);
 
 	DOREPLIFETIME(APlayerCharacterBase, bIsGuard);
 }
