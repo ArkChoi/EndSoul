@@ -41,6 +41,16 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+void AEnemyBase::OnRep_EHPUpdate(const float InEHP)
+{
+	OnChangeEHP.Broadcast(CurrentHP / MaxHP);
+}
+
+FString AEnemyBase::GetName()
+{
+	return Name;
+}
+
 void AEnemyBase::Attack(UAnimMontage* InMontage)
 {
 	PlayAnimMontage(InMontage);
@@ -59,5 +69,8 @@ void AEnemyBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
 		ImpulseForce *= 1000.f;
 		GetCapsuleComponent()->AddImpulse(ImpulseForce);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("DamageCheak"));
+
+	CurrentHP -= 10.f;
+	OnRep_EHPUpdate(1);
+
 }

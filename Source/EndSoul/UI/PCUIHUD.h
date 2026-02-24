@@ -9,11 +9,17 @@
 /**
  * 
  */
+class UUserWidget;
+
 UCLASS()
 class ENDSOUL_API APCUIHUD : public AHUD
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widget")
+	TObjectPtr <UUserWidget> WidgetBossBar;
+
 public:
 	void AddBossBar();
 

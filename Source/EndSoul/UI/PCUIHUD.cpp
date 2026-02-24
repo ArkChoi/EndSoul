@@ -2,8 +2,8 @@
 
 
 #include "PCUIHUD.h"
+#include "Blueprint/UserWidget.h"
 
 void APCUIHUD::AddBossBar()
 {
-
 }

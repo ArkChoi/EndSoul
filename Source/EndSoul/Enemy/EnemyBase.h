@@ -32,7 +32,12 @@ protected:
 	UPROPERTY(Category = Character, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UChildActorComponent> Weapon;
 
+public:
 	FOnChangeEHP OnChangeEHP;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void OnRep_EHPUpdate(const float InEHP);
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -40,6 +45,9 @@ public:
 
 	//Base State
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = State)
+	FString Name = "EnemyBase";
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = State)
 	float MaxHP = 100.f;
 
@@ -51,6 +59,9 @@ protected:
 
 	//Base State
 public:
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetName();
+
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE float GetMaxHP() { return MaxHP; };
 
