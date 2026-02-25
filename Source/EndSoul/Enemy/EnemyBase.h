@@ -55,7 +55,10 @@ protected:
 	float CurrentHP = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = State)
-	float Grogy = 100.f;
+	float MaxGrogy = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = State)
+	float CurrentGrogy = 100.f;
 
 	//Base State
 public:
@@ -72,17 +75,37 @@ public:
 	FORCEINLINE void SetHP(float InHP) { CurrentHP = InHP; };
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE float GetGrogy() { return Grogy; };
+	FORCEINLINE float GetMaxGrogy() { return MaxGrogy; };
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE void SetGrogy(float InGrogy) { Grogy = InGrogy; };
+	FORCEINLINE float GetCurrentGrogy() { return CurrentGrogy; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetCurrentGrogy(float InCurrentGrogy) { CurrentGrogy = InCurrentGrogy; };
 
 	UFUNCTION(BlueprintCallable)
 	void Attack(UAnimMontage* InMontage);
 
+	UFUNCTION(BlueprintCallable)
+	void Grogy(UAnimMontage* InMontage);
+
+	//Anime State
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation", Replicated)
+	uint8 bIsGrogy : 1 = false;
 
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool GetbIsGrogy() { return bIsGrogy; };
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetbIsGrogy(bool Inbool) { bIsGrogy = Inbool; };
+
+	UFUNCTION(BlueprintCallable)
+	bool AnimeCheack();
+
+public:
+	UFUNCTION(BlueprintCallable)
 	void ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser );
 
 };

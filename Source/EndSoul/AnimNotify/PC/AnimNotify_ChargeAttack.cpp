@@ -4,7 +4,7 @@
 #include "AnimNotify_ChargeAttack.h"
 #include "GameFramework/Character.h"
 #include "kismet/GameplayStatics.h"
-#include "../../Player/DamageType/ComboDamageType.h"
+#include "../../Player/DamageType/ChargeDamageType.h"
 
 FString UAnimNotify_ChargeAttack::GetNotifyName_Implementation() const
 {
@@ -40,7 +40,7 @@ void UAnimNotify_ChargeAttack::Notify(USkeletalMeshComponent* MeshComp, UAnimSeq
 
 		if (ResultHit.bBlockingHit)
 		{
-			UGameplayStatics::ApplyDamage(ResultHit.GetActor(), 10.f, Character->GetController(), Character, UComboDamageType::StaticClass());
+			UGameplayStatics::ApplyDamage(ResultHit.GetActor(), 20.f, Character->GetController(), Character, UChargeDamageType::StaticClass());
 		}
 	}
 }

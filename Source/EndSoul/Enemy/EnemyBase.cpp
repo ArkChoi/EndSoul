@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/ChildActorComponent.h"
 #include "../Weapon/WeaponBase.h"
+#include "../Player/DamageType/ChargeDamageType.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -56,8 +57,29 @@ void AEnemyBase::Attack(UAnimMontage* InMontage)
 	PlayAnimMontage(InMontage);
 }
 
+void AEnemyBase::Grogy(UAnimMontage* InMontage)
+{
+	PlayAnimMontage(InMontage);
+	CurrentGrogy = MaxGrogy;
+}
+
+bool AEnemyBase::AnimeCheack()
+{
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying())
+	{
+
+	}
+	return false;
+}
+
 void AEnemyBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
+	if (DamageType->IsA<UChargeDamageType>())
+	{
+		CurrentGrogy -= 30.f;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("%s Groggy : %f"), *DamagedActor->GetName(), CurrentGrogy);
+
 	ACharacter* Enemy = Cast<ACharacter>(DamageCauser);
 	if (Enemy)
 	{
@@ -70,7 +92,7 @@ void AEnemyBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
 		GetCapsuleComponent()->AddImpulse(ImpulseForce);
 	}
 
-	CurrentHP -= 10.f;
+	CurrentHP -= Damage;
 	OnRep_EHPUpdate(1);
 
 }
