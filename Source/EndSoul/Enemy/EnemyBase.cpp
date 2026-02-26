@@ -6,6 +6,7 @@
 #include "Components/ChildActorComponent.h"
 #include "../Weapon/WeaponBase.h"
 #include "../Player/DamageType/ChargeDamageType.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -63,11 +64,11 @@ void AEnemyBase::Grogy(UAnimMontage* InMontage)
 	CurrentGrogy = MaxGrogy;
 }
 
-bool AEnemyBase::AnimeCheack()
+bool AEnemyBase::AnimeCheack(UAnimMontage* InMontage)
 {
-	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying())
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(InMontage))
 	{
-
+		return true;
 	}
 	return false;
 }
@@ -95,4 +96,11 @@ void AEnemyBase::ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
 	CurrentHP -= Damage;
 	OnRep_EHPUpdate(1);
 
+}
+
+void AEnemyBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AEnemyBase, bIsGrogy);
 }

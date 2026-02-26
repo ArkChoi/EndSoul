@@ -102,10 +102,12 @@ public:
 	FORCEINLINE void SetbIsGrogy(bool Inbool) { bIsGrogy = Inbool; };
 
 	UFUNCTION(BlueprintCallable)
-	bool AnimeCheack();
+	bool AnimeCheack(UAnimMontage* InMontage);
 
 public:
 	UFUNCTION(BlueprintCallable)
 	void ProcessOnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser );
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };
